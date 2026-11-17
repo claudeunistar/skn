@@ -45,6 +45,8 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
 .cap{position:absolute;z-index:3;left:50%;top:40%;transform:translate(-50%,-50%) rotate(-12deg);padding:8px 18px;
   border:2px solid var(--red);color:#fff;background:rgba(150,20,30,.82);font-weight:600;letter-spacing:.24em;font-size:14px;
   text-transform:uppercase;white-space:nowrap}
+.padam{opacity:.34;filter:grayscale(1);pointer-events:none;user-select:none;cursor:not-allowed}
+.padam .utama{box-shadow:none}
 .panggung .kode{cursor:pointer}
 .panggung .kode:focus-visible{outline:.4mm solid #b8121f;outline-offset:.4mm}
 .sorot{animation:sorot 1.4s ease-out}
@@ -96,21 +98,20 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
 (function () {
   var D = window.SKN_KARTU, el = document.getElementById("hal"), aman = window.sknAman;
   var id = (new URLSearchParams(location.search).get("id") || "").trim().toLowerCase();
-  var o = null;
-  for (var i = 0; i < D.orang.length; i++) if (D.orang[i].id === id) o = D.orang[i];
-
   var kantor = '<a class="baris" href="https://wa.me/' + D.kantor.wa +
     '"><span>Hubungi Kantor SKN<small>Untuk konfirmasi atau keluhan</small></span><i>&rarr;</i></a>';
   var kaki = '<footer class="kaki">' + aman(D.perusahaan) + '<em>Sejak 2002</em></footer>';
 
-  if (!o) {
-    el.innerHTML = '<div class="kosong"><img src="logo.png" alt="SKN"><h1>Kartu tidak ditemukan</h1>' +
-      '<p class="catatan">Kode ini tidak terdaftar di ' + aman(D.perusahaan) +
-      '. Mohon konfirmasi ke kantor sebelum bertransaksi.</p></div>' +
+  function pesan(judul, isi, ulang) {
+    el.innerHTML = '<div class="kosong"><img src="logo.png" alt="SKN"><h1>' + judul + '</h1>' +
+      '<p class="catatan">' + isi + '</p></div>' +
+      (ulang ? '<div class="dua" style="grid-template-columns:1fr;margin-top:24px"><button class="kotak" id="ulang" type="button">Coba lagi</button></div>' : "") +
       '<div class="daftar" style="margin-top:30px">' + kantor + '</div>' + kaki;
-    return;
+    var u = document.getElementById("ulang");
+    if (u) u.onclick = function () { location.reload(); };
   }
 
+  function tampil(o) {
   var aktif = o.status === "AKTIF", url = D.dasar + "?id=" + o.id;
   var h = '<div class="label">ID Card Digital' + (o.contoh ? '<b>Contoh</b>' : "") + '</div>' +
     '<div class="panggung' + (aktif ? "" : " mati") + '" id="panggung">' +
@@ -130,7 +131,13 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
   } else {
     h += '<div class="segel mati"><b>!</b>Sudah tidak aktif</div>' +
       '<p class="catatan">Orang ini tidak lagi mewakili ' + aman(D.perusahaan) + '.</p>' +
-      '<div class="daftar" id="kontak" style="margin-top:26px">' + kantor + '</div>';
+      /* Tombol kontak tetap terlihat tetapi MATI: bukan tautan, tanpa nomor, tidak bisa diklik. */
+      '<div class="padam" aria-hidden="true"><div class="utama"><span>Chat WhatsApp<small>Tidak tersedia</small></span><i>&times;</i></div>' +
+      '<div class="dua"><div class="kotak">Simpan Kontak<small>tidak tersedia</small></div>' +
+      '<div class="kotak">Bagikan<small>tidak tersedia</small></div></div>' +
+      '<div class="daftar"><div class="baris"><span>Telepon</span><i>&times;</i></div>' +
+      '<div class="baris"><span>Website SKN</span><i>&times;</i></div></div></div>' +
+      '<div class="daftar" id="kontak" style="margin-top:0;border-top:0">' + kantor + '</div>';
   }
   el.innerHTML = h + kaki;
   document.title = o.nama + " - ID Card SKN";
@@ -174,6 +181,32 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
       navigator.clipboard.writeText(url).then(function () { kabar("Tautan disalin"); }, function () { kabar(url); });
     } else kabar(url);
   };
+  }   /* akhir tampil */
+
+  function selesai(j) {
+    if (j && j.ok && j.orang) return tampil(j.orang);
+    if (j && j.alasan === "gagal-muat")
+      return pesan("Kartu belum bisa dimuat", "Periksa sambungan internet Anda, lalu coba lagi.", true);
+    pesan("Kartu tidak ditemukan", "Kode ini tidak terdaftar di " + aman(D.perusahaan) +
+      ". Mohon konfirmasi ke kantor sebelum bertransaksi.", false);
+  }
+
+  /* Sumber data: Google Sheet lewat Apps Script (D.api). Tanpa D.api -> daftar di data.js. */
+  var api = D.api || "";
+  if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {          /* hanya untuk uji di laptop */
+    var uji = new URLSearchParams(location.search).get("api");
+    if (uji) api = uji;
+  }
+  if (!api) {
+    var o = null;
+    for (var i = 0; i < (D.orang || []).length; i++) if (D.orang[i].id === id) o = D.orang[i];
+    return selesai(o ? { ok: true, orang: o } : { ok: false, alasan: "tidak-ditemukan" });
+  }
+  el.innerHTML = '<div class="kosong"><img src="logo.png" alt="SKN"><p class="catatan" style="margin-top:28px">Memuat kartu&hellip;</p></div>';
+  fetch(api, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ aksi: "kartu", id: id }) })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(selesai, function () { selesai({ ok: false, alasan: "gagal-muat" }); });
 })();
 </script>
 </body>

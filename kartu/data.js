@@ -2,14 +2,11 @@
    id = kode acak (bukan nomor urut) supaya orang luar tidak bisa menebak kartu orang lain. */
 window.SKN_KARTU = {
   dasar: "https://claudeunistar.github.io/skn/kartu/",
+  /* Alamat web app Apps Script (Google Sheet HRD). Terisi = data diambil dari Sheet; kosong = pakai daftar "orang" di bawah. */
+  api: "https://script.google.com/macros/s/AKfycbyQSnGu_-V0x0tvawbGSVqpMVc4rR37yHsb6-zVlVmDNM8JpGc-aDR7zZCmP0cZGI46ZQ/exec",
   perusahaan: "PT Satelit Komunika Nusantara",
   kantor: { wa: "628117566789", web: "https://claudeunistar.github.io/skn/" },
-  orang: [
-    /* Data asli Dita; fotonya masih gambar sementara. fokus = bagian foto yang ditampilkan (kiri-kanan, atas-bawah).
-       Foto PNG tanpa latar: isi foto dengan file .png lalu tambahkan potong: true (bingkai lengkung hilang). */
-    { id: "d8r4wk", nama: "Dita Apriliana", jabatan: "HRD", wilayah: "", depo: "",
-      wa: "6281267739979", status: "AKTIF", foto: "dita.png", potong: true, fokus: "62% 0%", contoh: true }
-  ]
+  orang: []
 };
 
 /* Pembantu bersama: gambar QR sebagai SVG (butuh qrcode-generator). */
