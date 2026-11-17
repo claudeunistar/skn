@@ -4,155 +4,175 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#0c1424">
-<title>Kartu Nama Digital SKN</title>
+<meta name="theme-color" content="#070b14">
+<title>ID Card Digital SKN</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PT Satelit Komunika Nusantara">
+<meta property="og:title" content="ID Card Digital SKN">
+<meta property="og:description" content="Kontak resmi dan status karyawan PT Satelit Komunika Nusantara.">
+<meta property="og:image" content="https://claudeunistar.github.io/skn/kartu/pratinjau.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="ikon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="kartu.css">
 <style>
-:root{
-  --ink:#0c1424; --ink2:#131d31; --deep:#070b14; --ivory:#f3efe7; --soft:#a7afbf;
-  --red:#d5505a; --gold:#b3925a; --gold-l:#dcc296; --hair:rgba(220,194,150,.28); --rule:rgba(255,255,255,.09);
-  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
-  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-}
+:root{--ink:#0c1424;--deep:#070b14;--ivory:#f3efe7;--soft:#a7afbf;--red:#d5505a;--gold:#b3925a;--gold-l:#dcc296;
+  --hair:rgba(220,194,150,.28);--rule:rgba(255,255,255,.09);
+  --serif:"Playfair Display",Georgia,serif;--sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size:16px;line-height:1.5;
-  min-height:100vh;display:flex;justify-content:center}
-.kartu{position:relative;width:100%;max-width:440px;min-height:100vh;padding:34px 30px 30px;overflow:hidden;
-  background:radial-gradient(120% 60% at 50% 0%,#1b2946 0%,rgba(27,41,70,0) 62%),linear-gradient(180deg,#101a30 0%,#0c1424 48%,#090f1c 100%)}
-.kartu::before{content:"";position:absolute;inset:10px;border:1px solid var(--hair);pointer-events:none}
-@media (min-width:480px){body{padding:32px 16px}.kartu{min-height:0;box-shadow:0 30px 80px rgba(0,0,0,.55)}}
+body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size:16px;line-height:1.5;min-height:100vh;
+  display:flex;justify-content:center;
+  background-image:radial-gradient(90% 46% at 50% 0%,#1a2845 0%,rgba(26,40,69,0) 70%)}
+.hal{position:relative;width:100%;max-width:440px;padding:26px 22px 34px}
 
-.atas{text-align:center}
-.atas img{height:34px}
-.atas div{margin-top:10px;font-size:9.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold-l)}
-.hias{display:flex;align-items:center;gap:12px;margin:20px auto 0;width:150px}
-.hias::before,.hias::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
-.hias::after{transform:scaleX(-1)}
-.hias i{width:6px;height:6px;border:1px solid var(--gold-l);transform:rotate(45deg)}
+.label{text-align:center;font-size:9.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold-l);margin-bottom:18px}
+.label b{display:inline-block;margin-left:8px;padding:2px 8px;background:var(--red);color:#fff;font-weight:600;letter-spacing:.16em}
 
-.profil{text-align:center;padding-top:34px}
-.orbit{position:relative;width:236px;height:236px;margin:0 auto 26px;display:flex;align-items:center;justify-content:center}
-.orbit span{position:absolute;border-radius:50%;border:1px solid rgba(220,194,150,.16);inset:0}
-.orbit span+span{inset:24px;border:1px dashed rgba(220,194,150,.3);animation:putar 90s linear infinite}
-@keyframes putar{to{transform:rotate(360deg)}}
-.foto{position:relative;width:138px;height:138px;border-radius:50%;background:linear-gradient(160deg,#1a2740,#0b1220);
-  color:var(--gold-l);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:50px;
-  border:1px solid var(--gold);box-shadow:0 0 0 6px #0f1829,0 0 0 7px var(--hair),0 18px 40px rgba(0,0,0,.5);overflow:hidden}
-.foto img{width:100%;height:100%;object-fit:cover}
-h1{font-family:var(--serif);font-weight:500;font-size:32px;line-height:1.15;margin:0;color:#fff;letter-spacing:.005em}
-.jab{margin-top:12px;font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-l);font-weight:500}
-.wil{margin-top:8px;color:var(--soft);font-size:14px}
+/* Kartu sisi depan: ukuran asli 54 x 86 mm, diperbesar supaya pas di layar */
+.panggung{position:relative;width:min(100%,348px);aspect-ratio:54/86;margin:0 auto;-webkit-tap-highlight-color:transparent}
+.skala{position:absolute;left:0;top:0;width:54mm;height:86mm;transform-origin:0 0}
+.balik{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.3,.7,.2,1)}
+.panggung.terbalik .balik{transform:rotateY(180deg)}
+.balik .tag{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  box-shadow:0 6mm 14mm rgba(0,0,0,.55),0 0 0 .2mm rgba(220,194,150,.35)}
+.balik .tag.belakang{transform:rotateY(180deg)}
+.panggung.mati .tag{filter:grayscale(1) brightness(.75)}
+.cap{position:absolute;z-index:3;left:50%;top:40%;transform:translate(-50%,-50%) rotate(-12deg);padding:8px 18px;
+  border:2px solid var(--red);color:#fff;background:rgba(150,20,30,.82);font-weight:600;letter-spacing:.24em;font-size:14px;
+  text-transform:uppercase;white-space:nowrap}
+.panggung .kode{cursor:pointer}
+.panggung .kode:focus-visible{outline:.4mm solid #b8121f;outline-offset:.4mm}
+.sorot{animation:sorot 1.4s ease-out}
+@keyframes sorot{0%,40%{box-shadow:0 0 0 3px #fff,0 0 0 7px var(--gold-l)}100%{box-shadow:0 0 0 3px rgba(255,255,255,0),0 0 0 7px rgba(220,194,150,0)}}
 
-.segel{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:9px 16px 9px 10px;
-  border:1px solid var(--hair);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-l)}
-.segel b{width:20px;height:20px;border-radius:50%;background:linear-gradient(140deg,#ecd9b3,#b3925a);color:var(--ink);
+.segel{display:flex;align-items:center;justify-content:center;gap:10px;margin:22px auto 0;padding:9px 16px 9px 10px;width:max-content;
+  max-width:100%;border:1px solid var(--hair);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-l)}
+.segel b{flex:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(140deg,#ecd9b3,#b3925a);color:var(--ink);
   display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:0}
 .segel.mati{color:#f0a3a9;border-color:rgba(213,80,90,.5)}
 .segel.mati b{background:var(--red);color:#fff}
-.catatan{margin:16px auto 0;max-width:280px;color:var(--soft);font-size:14px}
+.catatan{margin:16px auto 0;max-width:300px;color:var(--soft);font-size:14px;text-align:center}
 
-.utama{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:30px;padding:17px 20px;
+.utama{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:24px;padding:17px 20px;
   background:linear-gradient(135deg,#ecd9b3 0%,#c9a970 55%,#b3925a 100%);color:var(--ink);text-decoration:none;
   font-weight:600;font-size:16px;box-shadow:0 12px 30px rgba(179,146,90,.22)}
 .utama small{display:block;font-weight:500;font-size:12px;color:rgba(12,20,36,.72);margin-top:2px;letter-spacing:.04em}
 .utama i{font-style:normal;font-size:20px}
+.dua{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.kotak{padding:14px 10px;background:none;border:1px solid var(--hair);color:var(--ivory);font:500 14px var(--sans);cursor:pointer;
+  text-align:center}
+.kotak small{display:block;font-weight:400;font-size:11px;color:var(--soft);margin-top:2px}
 .daftar{margin-top:14px;border-top:1px solid var(--rule)}
-.baris{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:16px 4px;
+.baris{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:15px 4px;
   background:none;border:0;border-bottom:1px solid var(--rule);color:var(--ivory);font:500 15px var(--sans);
   text-decoration:none;text-align:left;cursor:pointer}
 .baris small{display:block;font-weight:400;font-size:12px;color:var(--soft);margin-top:2px}
-.baris i{font-style:normal;color:var(--gold);font-size:17px;transition:transform .25s}
-.baris:hover i{transform:translateX(4px)}
-.utama:focus-visible,.baris:focus-visible{outline:1px solid var(--gold-l);outline-offset:3px}
+.baris i{font-style:normal;color:var(--gold);font-size:17px}
+.utama:focus-visible,.baris:focus-visible,.kotak:focus-visible,.panggung:focus-visible{outline:1px solid var(--gold-l);outline-offset:3px}
 
-.qr{margin-top:34px;text-align:center}
-.qr .label{font-size:9.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold-l);margin-bottom:20px}
-.qr .kotak{width:164px;margin:0 auto;padding:12px;background:var(--ivory);outline:1px solid var(--hair);outline-offset:7px}
-.qr svg{display:block;width:100%;height:auto}
-.qr p{font-size:12px;color:var(--soft);margin:22px 0 0}
-
-.kaki{margin-top:34px;text-align:center;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--soft)}
+.kaki{margin-top:30px;text-align:center;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--soft)}
 .kaki em{display:block;margin-top:6px;font-family:var(--serif);font-size:14px;letter-spacing:.02em;text-transform:none;color:var(--gold-l)}
-.contoh{position:absolute;top:22px;right:-38px;transform:rotate(45deg);width:140px;text-align:center;background:var(--red);
-  color:#fff;font-size:9px;letter-spacing:.18em;text-transform:uppercase;padding:4px 0;z-index:2}
-
-.muncul>*{opacity:0;transform:translateY(10px);animation:naik .7s cubic-bezier(.22,.7,.2,1) forwards}
-.muncul>*:nth-child(2){animation-delay:.08s}.muncul>*:nth-child(3){animation-delay:.16s}
-.muncul>*:nth-child(4){animation-delay:.24s}.muncul>*:nth-child(5){animation-delay:.32s}
-.muncul>*:nth-child(6){animation-delay:.4s}.muncul>*:nth-child(n+7){animation-delay:.48s}
-@keyframes naik{to{opacity:1;transform:none}}
+.roti{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);padding:10px 18px;background:var(--ivory);color:var(--ink);
+  font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:.3s;z-index:5}
+.roti.tampil{opacity:1;transform:translate(-50%,0)}
+.kosong{text-align:center;padding:40px 6px 0}
+.kosong img{height:34px}
+.kosong h1{font-family:var(--serif);font-weight:500;font-size:28px;margin:28px 0 0;color:#fff}
 </style>
 </head>
 <body>
-<main class="kartu" id="kartu"></main>
+<main class="hal" id="hal"></main>
+<div class="roti" id="roti" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script src="data.js"></script>
+<script src="kartu.js"></script>
 <script>
 (function () {
-  var D = window.SKN_KARTU, el = document.getElementById("kartu");
+  var D = window.SKN_KARTU, el = document.getElementById("hal"), aman = window.sknAman;
   var id = (new URLSearchParams(location.search).get("id") || "").trim().toLowerCase();
   var o = null;
   for (var i = 0; i < D.orang.length; i++) if (D.orang[i].id === id) o = D.orang[i];
 
-  function aman(s) { return String(s).replace(/[&<>"]/g, function (c) {
-    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  var kepala = '<header class="atas"><img src="logo.png" alt="SKN"><div>Kartu Nama Digital</div>' +
-    '<div class="hias"><i></i></div></header>';
   var kantor = '<a class="baris" href="https://wa.me/' + D.kantor.wa +
     '"><span>Hubungi Kantor SKN<small>Untuk konfirmasi atau keluhan</small></span><i>&rarr;</i></a>';
   var kaki = '<footer class="kaki">' + aman(D.perusahaan) + '<em>Sejak 2002</em></footer>';
 
   if (!o) {
-    el.innerHTML = '<div class="muncul">' + kepala + '<section class="profil"><h1>Kartu tidak ditemukan</h1>' +
+    el.innerHTML = '<div class="kosong"><img src="logo.png" alt="SKN"><h1>Kartu tidak ditemukan</h1>' +
       '<p class="catatan">Kode ini tidak terdaftar di ' + aman(D.perusahaan) +
-      '. Mohon konfirmasi ke kantor sebelum bertransaksi.</p></section>' +
-      '<div class="daftar" style="margin-top:30px">' + kantor + '</div>' + kaki + '</div>';
+      '. Mohon konfirmasi ke kantor sebelum bertransaksi.</p></div>' +
+      '<div class="daftar" style="margin-top:30px">' + kantor + '</div>' + kaki;
     return;
   }
 
-  var aktif = o.status === "AKTIF";
-  var foto = o.foto ? '<img src="' + aman(o.foto) + '" alt="Foto ' + aman(o.nama) + '" style="object-position:' +
-    aman(o.fokus || "50% 20%") + '">' : aman(sknInisial(o.nama));
-  var tempat = sknTempat(o);
-  var h = (o.contoh ? '<div class="contoh">Contoh</div>' : "") + '<div class="muncul">' + kepala +
-    '<section class="profil"><div class="orbit"><span></span><span></span><div class="foto">' + foto + '</div></div>' +
-    '<h1>' + aman(o.nama) + '</h1><div class="jab">' + aman(o.jabatan) + '</div>' +
-    (tempat ? '<div class="wil">' + aman(tempat) + '</div>' : "");
+  var aktif = o.status === "AKTIF", url = D.dasar + "?id=" + o.id;
+  var h = '<div class="label">ID Card Digital' + (o.contoh ? '<b>Contoh</b>' : "") + '</div>' +
+    '<div class="panggung' + (aktif ? "" : " mati") + '" id="panggung">' +
+    '<div class="skala" id="skala"><div class="balik">' + sknDepan(o, D, false, "Pindai atau ketuk") + '</div></div>' +
+    (aktif ? "" : '<div class="cap">Tidak aktif</div>') + '</div>';
 
   if (aktif) {
-    var pesan = encodeURIComponent("Halo " + o.nama + ", saya dapat nomor Anda dari kartu nama SKN.");
-    h += '<div class="segel"><b>&#10003;</b>Karyawan aktif SKN</div></section>' +
-      '<a class="utama" href="https://wa.me/' + o.wa + '?text=' + pesan + '"><span>Chat WhatsApp<small>' +
+    var pesan = encodeURIComponent("Halo " + o.nama + ", saya dapat nomor Anda dari ID card SKN.");
+    h += '<div class="segel"><b>&#10003;</b>Karyawan aktif SKN</div>' +
+      '<a class="utama" id="kontak" href="https://wa.me/' + o.wa + '?text=' + pesan + '"><span>Chat WhatsApp<small>' +
         sknNomor(o.wa) + ' &middot; nomor kantor</small></span><i>&rarr;</i></a>' +
-      '<div class="daftar">' +
-      '<button class="baris" id="simpan" type="button"><span>Simpan Kontak<small>Masuk ke kontak HP Anda</small></span><i>+</i></button>' +
-      '<a class="baris" href="tel:+' + o.wa + '"><span>Telepon</span><i>&rarr;</i></a>' +
+      '<div class="dua"><button class="kotak" id="simpan" type="button">Simpan Kontak<small>ke kontak HP Anda</small></button>' +
+      '<button class="kotak" id="bagi" type="button">Bagikan<small>kirim kartu ini</small></button></div>' +
+      '<div class="daftar"><a class="baris" href="tel:+' + o.wa + '"><span>Telepon</span><i>&rarr;</i></a>' +
       '<a class="baris" href="' + D.kantor.web + '"><span>Website SKN<small>Profil, depo, dan store</small></span><i>&rarr;</i></a>' +
-      kantor + '</div>' +
-      '<section class="qr"><div class="label">Kode QR kartu ini</div><div class="kotak">' +
-      sknQR(D.dasar + "?id=" + o.id) + '</div><p>Tunjukkan layar ini agar orang lain bisa memindai.</p></section>';
+      kantor + '</div>';
   } else {
     h += '<div class="segel mati"><b>!</b>Sudah tidak aktif</div>' +
-      '<p class="catatan">Orang ini tidak lagi mewakili ' + aman(D.perusahaan) + '.</p></section>' +
-      '<div class="daftar" style="margin-top:30px">' + kantor + '</div>';
+      '<p class="catatan">Orang ini tidak lagi mewakili ' + aman(D.perusahaan) + '.</p>' +
+      '<div class="daftar" id="kontak" style="margin-top:26px">' + kantor + '</div>';
   }
-  el.innerHTML = h + kaki + '</div>';
-  document.title = o.nama + " - SKN";
+  el.innerHTML = h + kaki;
+  document.title = o.nama + " - ID Card SKN";
 
-  var b = document.getElementById("simpan");
-  if (b) b.onclick = function () {
+  /* Perbesar kartu 54 mm supaya selebar panggung */
+  var panggung = document.getElementById("panggung"), skala = document.getElementById("skala");
+  function ukur() { skala.style.transform = "scale(" + (panggung.clientWidth / skala.offsetWidth) + ")"; }
+  ukur(); window.addEventListener("resize", ukur);
+  /* QR di kartu bisa diketuk: membawa ke tombol kontak (hasil yang sama dengan memindai). */
+  var qr = panggung.querySelector(".kode"), tuju = document.getElementById("kontak");
+  if (qr && tuju) {
+    qr.setAttribute("role", "button"); qr.setAttribute("tabindex", "0"); qr.setAttribute("aria-label", "Buka kontak");
+    var buka = function () {
+      tuju.scrollIntoView({ behavior: "smooth", block: "center" });
+      tuju.classList.remove("sorot"); void tuju.offsetWidth; tuju.classList.add("sorot");
+    };
+    qr.addEventListener("click", buka);
+    qr.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); buka(); } });
+  }
+
+  var roti = document.getElementById("roti"), jeda;
+  function kabar(t) { roti.textContent = t; roti.classList.add("tampil"); clearTimeout(jeda);
+    jeda = setTimeout(function () { roti.classList.remove("tampil"); }, 2200); }
+
+  var s = document.getElementById("simpan");
+  if (s) s.onclick = function () {
     var v = ["BEGIN:VCARD", "VERSION:3.0", "N:;" + o.nama + ";;;", "FN:" + o.nama + " (SKN)",
       "ORG:" + D.perusahaan, "TITLE:" + o.jabatan + (o.wilayah ? " - " + o.wilayah : ""), "TEL;TYPE=CELL:+" + o.wa,
-      "URL:" + D.dasar + "?id=" + o.id, "END:VCARD"].join("\r\n");
+      "URL:" + url, "END:VCARD"].join("\r\n");
     var a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([v], { type: "text/vcard" }));
     a.download = o.nama.replace(/\s+/g, "-") + "-SKN.vcf";
     document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  var b = document.getElementById("bagi");
+  if (b) b.onclick = function () {
+    var isi = { title: o.nama + " - " + D.perusahaan, text: "ID card digital " + o.nama + " (" + o.jabatan + ", " + D.perusahaan + ")", url: url };
+    if (navigator.share) { navigator.share(isi).catch(function () {}); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () { kabar("Tautan disalin"); }, function () { kabar(url); });
+    } else kabar(url);
   };
 })();
 </script>
