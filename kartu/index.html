@@ -15,6 +15,11 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="ikon.png">
+<link rel="apple-touch-icon" href="ikon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ID Card SKN">
+<script>/* Chrome menawarkan pemasangan: simpan dulu, dipakai saat tombol "Pasang di layar utama" diketuk. */
+window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); window.sknPasang = e; });</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
@@ -77,6 +82,11 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
 .baris i{font-style:normal;color:var(--gold);font-size:17px}
 .utama:focus-visible,.baris:focus-visible,.kotak:focus-visible,.panggung:focus-visible{outline:1px solid var(--gold-l);outline-offset:3px}
 
+.pasang{margin-top:22px;text-align:center}
+.tautan{background:none;border:0;padding:6px;color:var(--gold-l);font:500 13px var(--sans);text-decoration:underline;
+  text-underline-offset:4px;cursor:pointer}
+.cara{margin:12px auto 0;max-width:330px;padding:14px 16px;border:1px solid var(--hair);font-size:13px;line-height:1.6;color:var(--soft);text-align:left}
+.cara b{color:var(--ivory);font-weight:500}
 .kaki{margin-top:30px;text-align:center;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--soft)}
 .kaki em{display:block;margin-top:6px;font-family:var(--serif);font-size:14px;letter-spacing:.02em;text-transform:none;color:var(--gold-l)}
 .roti{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);padding:10px 18px;background:var(--ivory);color:var(--ink);
@@ -113,6 +123,8 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
 
   function tampil(o) {
   var aktif = o.status === "AKTIF", url = D.dasar + "?id=" + o.id;
+  /* Tautan untuk DIBAGIKAN: folder per orang, supaya pratinjau di WA menampilkan kartu orang ini. */
+  var folder = encodeURIComponent(o.id) + "/", urlBagi = D.dasar + folder;
   var h = '<div class="label">ID Card Digital' + (o.contoh ? '<b>Contoh</b>' : "") + '</div>' +
     '<div class="panggung' + (aktif ? "" : " mati") + '" id="panggung">' +
     '<div class="skala" id="skala"><div class="balik">' + sknDepan(o, D, false, "Pindai atau ketuk") + '</div></div>' +
@@ -139,8 +151,26 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
       '<div class="baris"><span>Website SKN</span><i>&times;</i></div></div></div>' +
       '<div class="daftar" id="kontak" style="margin-top:0;border-top:0">' + kantor + '</div>';
   }
+  if (aktif) h += '<div class="pasang"><button class="tautan" id="pasang" type="button">Ini kartu Anda? Pasang di layar utama HP</button>' +
+    '<div class="cara" id="cara" hidden><b>Android (Chrome):</b> ketuk &#8942; di kanan atas, lalu <i>Tambahkan ke layar utama</i>.<br>' +
+    '<b>iPhone (Safari):</b> ketuk tombol Bagikan, lalu <i>Tambahkan ke Layar Utama</i>.<br>' +
+    'Setelah itu kartu ini terbuka dengan satu ketukan, seperti aplikasi.</div></div>';
   el.innerHTML = h + kaki;
   document.title = o.nama + " - ID Card SKN";
+
+  /* Gambar kartu & manifest per orang (dibuat oleh alat\buat_bagikan.py). Tidak ada = fitur ini diam saja. */
+  var gambarKartu = null;
+  if (aktif) {
+    fetch(folder + "kartu.jpg").then(function (r) { if (!r.ok) throw 0; return r.blob(); })
+      .then(function (bl) { gambarKartu = new File([bl], "ID-Card-" + o.nama.replace(/\s+/g, "-") + ".jpg", { type: "image/jpeg" }); })
+      .catch(function () {});
+    var m = document.createElement("link"); m.rel = "manifest"; m.href = folder + "manifest.json"; document.head.appendChild(m);
+  }
+  var pasang = document.getElementById("pasang");
+  if (pasang) pasang.onclick = function () {
+    if (window.sknPasang) { window.sknPasang.prompt(); window.sknPasang = null; return; }
+    var c = document.getElementById("cara"); c.hidden = !c.hidden;
+  };
 
   /* Perbesar kartu 54 mm supaya selebar panggung */
   var panggung = document.getElementById("panggung"), skala = document.getElementById("skala");
@@ -166,7 +196,7 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
   if (s) s.onclick = function () {
     var v = ["BEGIN:VCARD", "VERSION:3.0", "N:;" + o.nama + ";;;", "FN:" + o.nama + " (SKN)",
       "ORG:" + D.perusahaan, "TITLE:" + o.jabatan + (o.wilayah ? " - " + o.wilayah : ""), "TEL;TYPE=CELL:+" + o.wa,
-      "URL:" + url, "END:VCARD"].join("\r\n");
+      "URL:" + urlBagi, "END:VCARD"].join("\r\n");
     var a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([v], { type: "text/vcard" }));
     a.download = o.nama.replace(/\s+/g, "-") + "-SKN.vcf";
@@ -175,11 +205,21 @@ body{background:var(--deep);color:var(--ivory);font-family:var(--sans);font-size
 
   var b = document.getElementById("bagi");
   if (b) b.onclick = function () {
-    var isi = { title: o.nama + " - " + D.perusahaan, text: "ID card digital " + o.nama + " (" + o.jabatan + ", " + D.perusahaan + ")", url: url };
-    if (navigator.share) { navigator.share(isi).catch(function () {}); return; }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(function () { kabar("Tautan disalin"); }, function () { kabar(url); });
-    } else kabar(url);
+    var judul = o.nama + " - " + D.perusahaan, teks = "ID card digital " + o.nama + " (" + o.jabatan + ", " + D.perusahaan + ")";
+    function salin() {
+      if (navigator.clipboard && navigator.clipboard.writeText)
+        navigator.clipboard.writeText(urlBagi).then(function () { kabar("Tautan disalin"); }, function () { kabar(urlBagi); });
+      else kabar(urlBagi);
+    }
+    if (!navigator.share) return salin();
+    /* Utama: gambar kartu + tautan dalam satu kiriman. Tidak didukung -> tautan saja. */
+    var denganGambar = gambarKartu && navigator.canShare && navigator.canShare({ files: [gambarKartu] });
+    var isi = denganGambar ? { files: [gambarKartu], title: judul, text: teks + "\n" + urlBagi } : { title: judul, text: teks, url: urlBagi };
+    navigator.share(isi).catch(function (e) {
+      if (e && e.name === "AbortError") return;            /* pengguna membatalkan */
+      if (denganGambar) navigator.share({ title: judul, text: teks, url: urlBagi }).catch(function () {});
+      else salin();
+    });
   };
   }   /* akhir tampil */
 
